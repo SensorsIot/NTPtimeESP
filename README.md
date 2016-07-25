@@ -5,7 +5,7 @@ This library returns the queries the NTP time service and returns the actual tim
 struct strDateTime
 {
 
-  byte hour;
+  byte hour; \n
   
   byte minute;
   
