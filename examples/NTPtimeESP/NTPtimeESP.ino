@@ -6,7 +6,7 @@
    The Harringay Maker Space
    License: Apache License v2
 */
-#include <NTPtime.h>
+#include <NTPtimeESP.h>
 
 
 NTPtime NTPch("ch.pool.ntp.org");
