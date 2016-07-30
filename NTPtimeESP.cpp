@@ -171,7 +171,7 @@ strDateTime NTPtime::getNTPtime(int _timeZone, boolean _DayLightSaving)
       UDPNTPClient.write(_packetBuffer, NTP_PACKET_SIZE);
       UDPNTPClient.endPacket();
 
-      delay(100);
+      delay(500);
 
       int cb = UDPNTPClient.parsePacket();
       if (cb == 0) {
