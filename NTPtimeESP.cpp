@@ -153,9 +153,7 @@ strDateTime NTPtime::getNTPtime(float _timeZone, boolean _DayLightSaving)
        Serial.println("Waiting for NTP packet");
     #endif
     UDPNTPClient.begin(1337);  // Port for NTP receive
-    
-    
-
+ 
     while (!_dateTime.valid) {
 
     #ifdef DEBUG_ON
