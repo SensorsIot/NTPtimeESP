@@ -44,8 +44,8 @@ void setup() {
 
 void loop() {
 
-  // first parameter: Time zone; second parameter: 1 for European summer time; 2 for US daylight saving time (not implemented yet)
-  dateTime = NTPch.getNTPtime(1, 1);
+  // first parameter: Time zone in floating point (for India); second parameter: 1 for European summer time; 2 for US daylight saving time (not implemented yet)
+  dateTime = NTPch.getNTPtime(1.0, 1);
   NTPch.printDateTime(dateTime);
 
   byte actualHour = dateTime.hour;

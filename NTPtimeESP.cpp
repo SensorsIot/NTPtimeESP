@@ -18,7 +18,7 @@ const int NTP_PACKET_SIZE = 48;
 byte _packetBuffer[ NTP_PACKET_SIZE];
 static const uint8_t _monthDays[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-int _timeZone=0;
+float _timeZone=0.0;
 String _NTPserver="";
 
 // NTPserver is the name of the NTPserver
@@ -128,7 +128,7 @@ boolean NTPtime::daylightSavingTime(unsigned long _timeStamp) {
 }
 
 
-unsigned long NTPtime::adjustTimeZone(unsigned long _timeStamp, int _timeZone, byte _DayLightSaving) {
+unsigned long NTPtime::adjustTimeZone(unsigned long _timeStamp, float _timeZone, byte _DayLightSaving) {
   strDateTime _tempDateTime;
   _timeStamp += _timeZone *  3600; // adjust timezone
   if (_DayLightSaving ==1 && summerTime(_timeStamp)) _timeStamp += 3600; // European Summer time
@@ -139,7 +139,7 @@ unsigned long NTPtime::adjustTimeZone(unsigned long _timeStamp, int _timeZone, b
 // time zone is the difference to UTC in hours
 // if _isDayLightSaving is true, time will be adjusted accordingly
 
-strDateTime NTPtime::getNTPtime(int _timeZone, boolean _DayLightSaving)
+strDateTime NTPtime::getNTPtime(float _timeZone, boolean _DayLightSaving)
 {
   int cb;
   strDateTime _dateTime;
@@ -152,7 +152,9 @@ strDateTime NTPtime::getNTPtime(int _timeZone, boolean _DayLightSaving)
     #ifdef DEBUG_ON
        Serial.println("Waiting for NTP packet");
     #endif
-    UDPNTPClient.begin(2390);  // Port for NTP receive
+    UDPNTPClient.begin(1337);  // Port for NTP receive
+    
+    
 
     while (!_dateTime.valid) {
 

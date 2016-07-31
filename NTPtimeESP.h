@@ -35,14 +35,14 @@ struct strDateTime
 class NTPtime {
   public:
     NTPtime(String NTPtime);
-    strDateTime getNTPtime(int _timeZone, boolean _DayLightSaving);
+    strDateTime getNTPtime(float _timeZone, boolean _DayLightSaving);
     void printDateTime(strDateTime _dateTime);
 
   private:
     strDateTime ConvertUnixTimestamp( unsigned long _tempTimeStamp);
     boolean summerTime(unsigned long _timeStamp );
     boolean daylightSavingTime(unsigned long _timeStamp);
-    unsigned long adjustTimeZone(unsigned long _timeStamp, int _timeZone, byte _DayLightSavingSaving);
+    unsigned long adjustTimeZone(unsigned long _timeStamp, float _timeZone, byte _DayLightSavingSaving);
     WiFiUDP UDPNTPClient;
 };
 #endif
