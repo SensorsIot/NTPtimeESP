@@ -153,8 +153,6 @@ strDateTime NTPtime::getNTPtime(int _timeZone, boolean _DayLightSaving)
        Serial.println("Waiting for NTP packet");
     #endif
     UDPNTPClient.begin(2390);  // Port for NTP receive
-    IPAddress _timeServerIP;
-    WiFi.hostByName(_NTPserver.c_str(), _timeServerIP);
 
     while (!_dateTime.valid) {
 
@@ -170,16 +168,13 @@ strDateTime NTPtime::getNTPtime(int _timeZone, boolean _DayLightSaving)
       _packetBuffer[13]  = 0x4E;
       _packetBuffer[14]  = 49;
       _packetBuffer[15]  = 52;
-      UDPNTPClient.beginPacket(_timeServerIP, 123);
+      UDPNTPClient.beginPacket(_NTPserver.c_str(), 123);
       UDPNTPClient.write(_packetBuffer, NTP_PACKET_SIZE);
       UDPNTPClient.endPacket();
 
       unsigned long entry=millis();
       do {
          cb = UDPNTPClient.parsePacket();
-         #ifdef DEBUG_ON
-            Serial.print(cb);
-         #endif
       } while (cb == 0 && millis()-entry<5000);
       
       if (cb == 0) {
