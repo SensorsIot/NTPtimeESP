@@ -141,6 +141,7 @@ unsigned long NTPtime::adjustTimeZone(unsigned long _timeStamp, int _timeZone, b
 
 strDateTime NTPtime::getNTPtime(int _timeZone, boolean _DayLightSaving)
 {
+  int cb;
   strDateTime _dateTime;
   unsigned long _unixTime = 0;
   _dateTime.valid = false;
@@ -157,7 +158,9 @@ strDateTime NTPtime::getNTPtime(int _timeZone, boolean _DayLightSaving)
 
     while (!_dateTime.valid) {
 
-      //Serial.println("sending NTP packet...");
+    #ifdef DEBUG_ON
+      Serial.println("sending NTP packet...");
+    #endif
       memset(_packetBuffer, 0, NTP_PACKET_SIZE);
       _packetBuffer[0] = 0b11100011;   // LI, Version, Mode
       _packetBuffer[1] = 0;     // Stratum, or type of clock
@@ -171,9 +174,14 @@ strDateTime NTPtime::getNTPtime(int _timeZone, boolean _DayLightSaving)
       UDPNTPClient.write(_packetBuffer, NTP_PACKET_SIZE);
       UDPNTPClient.endPacket();
 
-      delay(500);
-
-      int cb = UDPNTPClient.parsePacket();
+      unsigned long entry=millis();
+      do {
+         cb = UDPNTPClient.parsePacket();
+         #ifdef DEBUG_ON
+            Serial.print(cb);
+         #endif
+      } while (cb == 0 && millis()-entry<5000);
+      
       if (cb == 0) {
          #ifdef DEBUG_ON
             Serial.print(".");
@@ -181,6 +189,7 @@ strDateTime NTPtime::getNTPtime(int _timeZone, boolean _DayLightSaving)
       }
       else {
         #ifdef DEBUG_ON
+           Serial.println();
            Serial.print("NTP packet received, length=");
            Serial.println(cb);
         #endif
