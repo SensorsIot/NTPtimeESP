@@ -153,6 +153,12 @@ strDateTime NTPtime::getNTPtime(float _timeZone, boolean _DayLightSaving)
        Serial.println("Waiting for NTP packet");
     #endif
     UDPNTPClient.begin(1337);  // Port for NTP receive
+    
+    #ifdef DEBUG_ON
+      IPAddress _timeServerIP;
+ -    WiFi.hostByName(_NTPserver.c_str(), _timeServerIP);
+      Serial.println(_timeServerIP);
+    #endif
  
     while (!_dateTime.valid) {
 
