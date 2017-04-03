@@ -16,9 +16,7 @@
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
 
-
-#define DEBUG_ON
-
+//#define DEBUG_ON
 
 struct strDateTime
 {
@@ -37,8 +35,15 @@ class NTPtime {
     NTPtime(String NTPtime);
     strDateTime getNTPtime(float _timeZone, boolean _DayLightSaving);
     void printDateTime(strDateTime _dateTime);
+    bool setSendInterval(unsigned long _sendInterval);  // in seconds
+    bool setRecvTimeout(unsigned long _recvTimeout);    // in seconds
 
   private:
+    bool _sendPhase;
+    unsigned long _sentTime;
+    unsigned long _sendInterval;
+    unsigned long _recvTimeout;
+
     strDateTime ConvertUnixTimestamp( unsigned long _tempTimeStamp);
     boolean summerTime(unsigned long _timeStamp );
     boolean daylightSavingTime(unsigned long _timeStamp);
