@@ -156,10 +156,55 @@ boolean NTPtime::summerTime(unsigned long _timeStamp ) {
 
 boolean NTPtime::daylightSavingTime(unsigned long _timeStamp) {
 
+boolean daylightSavingTime(unsigned long _timeStamp) {
+
   strDateTime  _tempDateTime;
   _tempDateTime = ConvertUnixTimestamp(_timeStamp);
 
 // here the US code
+  //return false;
+  // see http://stackoverflow.com/questions/5590429/calculating-daylight-saving-time-from-only-date
+  // since 2007 DST begins on second Sunday of March and ends on first Sunday of November. 
+  // Time change occurs at 2AM locally
+  if (_tempDateTime.month < 3 || _tempDateTime.month > 11) return false;  //January, february, and december are out.
+  if (_tempDateTime.month > 3 && _tempDateTime.month < 11) return true;   //April to October are in
+  int previousSunday = _tempDateTime.day - (_tempDateTime.dayofWeek - 1);  // dow Sunday input was 1,
+    // need it to be Sunday = 0. If 1st of month = Sunday, previousSunday=1-0=1
+  //int previousSunday = day - (dow-1);
+  // -------------------- March ---------------------------------------
+  //In march, we are DST if our previous Sunday was = to or after the 8th.
+  if (_tempDateTime.month == 3 ) {  // in march, if previous Sunday is after the 8th, is DST
+          // unless Sunday and hour < 2am
+    if ( previousSunday >= 8 ) { // Sunday = 1
+      // return true if day > 14 or (dow == 1 and hour >= 2)
+      return ((_tempDateTime.day > 14) || 
+        ((_tempDateTime.dayofWeek == 1 && _tempDateTime.hour >= 2) || _tempDateTime.dayofWeek > 1));
+    } // end if ( previousSunday >= 8 && _dateTime.dayofWeek > 0 )
+    else
+    {
+      // previousSunday has to be < 8 to get here
+      //return (previousSunday < 8 && (_tempDateTime.dayofWeek - 1) = 0 && _tempDateTime.hour >= 2)
+      return false;
+    } // end else
+  } // end if (_tempDateTime.month == 3 )
+
+// ------------------------------- November -------------------------------
+
+  // gets here only if month = November
+  //In november we must be before the first Sunday to be dst.
+        //That means the previous Sunday must be before the 2nd.
+  if (previousSunday < 1)
+    {
+      // is not true for Sunday after 2am or any day after 1st Sunday any time
+      return ((_tempDateTime.dayofWeek == 1 && _tempDateTime.hour < 2) || (_tempDateTime.dayofWeek > 1));
+      //return true;
+    } // end if (previousSunday < 1)
+  else
+    {
+      // return false unless after first wk and dow = Sunday and hour < 2
+      return (_tempDateTime.day <8 && _tempDateTime.dayofWeek == 1 && _tempDateTime.hour < 2);
+    }  // end else
+} // end boolean NTPtime::daylightSavingTime(unsigned long _timeStamp)
     return false;
 }
 
