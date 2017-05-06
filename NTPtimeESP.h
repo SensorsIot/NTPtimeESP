@@ -16,8 +16,6 @@
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
 
-//#define DEBUG_ON
-
 struct strDateTime
 {
   byte hour;
