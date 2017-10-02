@@ -14,6 +14,7 @@ struct strDateTime
   byte day;
   byte dayofWeek;
   boolean valid;
+  
 };
 ```
 
