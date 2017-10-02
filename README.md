@@ -7,21 +7,13 @@ struct strDateTime
 {
 
   byte hour;
-  
   byte minute;
-  
   byte second;
-  
   int year;
-  
   byte month;
-  
   byte day;
-  
   byte dayofWeek;
-  
   boolean valid;
-  
 };
 ```
 
