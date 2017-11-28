@@ -89,6 +89,8 @@ strDateTime NTPtime::ConvertUnixTimestamp( unsigned long _tempTimeStamp) {
 	uint8_t _year, _month, _monthLength;
 	uint32_t _time;
 	unsigned long _days;
+	
+	_tempDateTime.epochTime = _tempTimeStamp;
 
 	_time = (uint32_t)_tempTimeStamp;
 	_tempDateTime.second = _time % 60;
@@ -205,7 +207,7 @@ boolean NTPtime::daylightSavingTime(unsigned long _timeStamp) {
 } // end boolean NTPtime::daylightSavingTime(unsigned long _timeStamp)
 
 
-unsigned long NTPtime::adjustTimeZone(unsigned long _timeStamp, float _timeZone, byte _DayLightSaving) {
+unsigned long NTPtime::adjustTimeZone(unsigned long _timeStamp, float _timeZone, int _DayLightSaving) {
 	strDateTime _tempDateTime;
 	_timeStamp += (unsigned long)(_timeZone *  3600.0); // adjust timezone
 	if (_DayLightSaving ==1 && summerTime(_timeStamp)) _timeStamp += 3600; // European Summer time
@@ -217,7 +219,7 @@ unsigned long NTPtime::adjustTimeZone(unsigned long _timeStamp, float _timeZone,
 // if _isDayLightSaving is true, time will be adjusted accordingly
 // Use returned time only after checking "ret.valid" flag
 
-strDateTime NTPtime::getNTPtime(float _timeZone, boolean _DayLightSaving) {
+strDateTime NTPtime::getNTPtime(float _timeZone, int _DayLightSaving) {
 	int cb;
 	strDateTime _dateTime;
 	unsigned long _unixTime = 0;
