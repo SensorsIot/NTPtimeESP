@@ -2,7 +2,7 @@
 
    NTPtime for ESP8266
    This routine gets the unixtime from a NTP server and adjusts it to the time zone and the
-   Middle European summer time if requested
+   Middle European summer time or US daylight savings time if requested
 
   Author: Andreas Spiess V1.0 2016-6-28
 

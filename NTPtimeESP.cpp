@@ -1,7 +1,7 @@
 /*
 NTP
 This routine gets the unixtime from a NTP server and adjusts it to the time zone and the
-Middle European summer time if requested
+Middle European summer time or US daylight savings time if requested
 
 Author: Andreas Spiess V1.0 2016-5-28
 
@@ -15,13 +15,13 @@ Based on work from John Lassen: http://www.john-lassen.de/index.php/projects/esp
 #define LEAP_YEAR(Y) ( ((1970+Y)>0) && !((1970+Y)%4) && ( ((1970+Y)%100) || !((1970+Y)%400) ) )
 
 #define SEC_TO_MS             1000
-#define RECV_TIMEOUT_DEFATUL  1       // 1 second
-#define SEND_INTRVL_DEFAULT   1       // 1 second
+#define RECV_TIMEOUT_DEFAULT   1      // 1 second
+#define SEND_INTERVAL_DEFAULT  1      // 1 second
 #define MAX_SEND_INTERVAL     60      // 60 seconds
-#define MAC_RECV_TIMEOUT      60      // 60 seconds
+#define MAX_RECV_TIMEOUT      60      // 60 seconds
 
 const int NTP_PACKET_SIZE = 48;
-byte _packetBuffer[ NTP_PACKET_SIZE];
+byte _packetBuffer[NTP_PACKET_SIZE];
 static const uint8_t _monthDays[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 float _timeZone=0.0;
@@ -41,7 +41,7 @@ bool NTPtime::setSendInterval(unsigned long _sendInterval_) {
 
 bool NTPtime::setRecvTimeout(unsigned long _recvTimeout_) {
 	bool retVal = false;
-	if(_recvTimeout_ <= MAC_RECV_TIMEOUT) {
+	if(_recvTimeout_ <= MAX_RECV_TIMEOUT) {
 		_recvTimeout = _recvTimeout_ * SEC_TO_MS;
 		retVal = true;
 	}
@@ -53,8 +53,8 @@ NTPtime::NTPtime(String NTPserver) {
 	_NTPserver = NTPserver;
 	_sendPhase = true;
 	_sentTime  = 0;
-	_sendInterval = SEND_INTRVL_DEFAULT * SEC_TO_MS;
-	_recvTimeout = RECV_TIMEOUT_DEFATUL * SEC_TO_MS;
+	_sendInterval = SEND_INTERVAL_DEFAULT * SEC_TO_MS;
+	_recvTimeout = RECV_TIMEOUT_DEFAULT * SEC_TO_MS;
 }
 
 void NTPtime::printDateTime(strDateTime _dateTime) {
@@ -151,9 +151,9 @@ boolean NTPtime::summerTime(unsigned long _timeStamp ) {
 	if (_tempDateTime.month < 3 || _tempDateTime.month > 10) return false; // keine Sommerzeit in Jan, Feb, Nov, Dez
 	if (_tempDateTime.month > 3 && _tempDateTime.month < 10) return true; // Sommerzeit in Apr, Mai, Jun, Jul, Aug, Sep
 	if (_tempDateTime.month == 3 && (_tempDateTime.hour + 24 * _tempDateTime.day) >= (3 +  24 * (31 - (5 * _tempDateTime.year / 4 + 4) % 7)) || _tempDateTime.month == 10 && (_tempDateTime.hour + 24 * _tempDateTime.day) < (3 +  24 * (31 - (5 * _tempDateTime.year / 4 + 1) % 7)))
-	return true;
+		return true;
 	else
-	return false;
+		return false;
 }
 
 boolean NTPtime::daylightSavingTime(unsigned long _timeStamp) {
@@ -202,7 +202,7 @@ boolean NTPtime::daylightSavingTime(unsigned long _timeStamp) {
 	else
 	{
 		// return false unless after first wk and dow = Sunday and hour < 2
-		return (_tempDateTime.day <8 && _tempDateTime.dayofWeek == 1 && _tempDateTime.hour < 2);
+		return (_tempDateTime.day < 8 && _tempDateTime.dayofWeek == 1 && _tempDateTime.hour < 2);
 	}  // end else
 } // end boolean NTPtime::daylightSavingTime(unsigned long _timeStamp)
 
@@ -210,15 +210,14 @@ boolean NTPtime::daylightSavingTime(unsigned long _timeStamp) {
 unsigned long NTPtime::adjustTimeZone(unsigned long _timeStamp, float _timeZone, int _DayLightSaving) {
 	strDateTime _tempDateTime;
 	_timeStamp += (unsigned long)(_timeZone *  3600.0); // adjust timezone
-	if (_DayLightSaving ==1 && summerTime(_timeStamp)) _timeStamp += 3600; // European Summer time
-	if (_DayLightSaving ==2 && daylightSavingTime(_timeStamp)) _timeStamp += 3600; // US daylight time
+	if (_DayLightSaving == 1 && summerTime(_timeStamp)) _timeStamp += 3600; // European Summer time
+	if (_DayLightSaving == 2 && daylightSavingTime(_timeStamp)) _timeStamp += 3600; // US daylight time
 	return _timeStamp;
 }
 
-// time zone is the difference to UTC in hours
-// if _isDayLightSaving is true, time will be adjusted accordingly
+// _timeZone is the difference from UTC in hours
+// _DayLightSaving: 0: no adjustment, 1: Europe summer time, 2: US daylight saving time
 // Use returned time only after checking "ret.valid" flag
-
 strDateTime NTPtime::getNTPtime(float _timeZone, int _DayLightSaving) {
 	int cb;
 	strDateTime _dateTime;
