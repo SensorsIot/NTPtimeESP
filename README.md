@@ -2,7 +2,7 @@
 
 This library returns the queries the NTP time service and returns the actual time in a structure:
 
-```
+```c
 struct strDateTime
 {
 
@@ -18,4 +18,5 @@ struct strDateTime
 };
 ```
 
-The time can be automatically adjusted by time zone and European summer time. It runs on ESP8266 and needs an internet connection.
+The time can be automatically adjusted by time zone and European summer time or US daylight savings time.
+It runs on ESP8266 and needs an internet connection.
