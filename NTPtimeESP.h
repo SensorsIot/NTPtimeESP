@@ -13,7 +13,11 @@
 #define NTPtime_h
 
 #include <Arduino.h>
-#include <ESP8266WiFi.h>
+#if defined(ESP8266)
+	#include <ESP8266WiFi.h>
+#elif defined(ESP32)
+	#include <WiFi.h>
+#endif
 #include <WiFiUdp.h>
 
 struct strDateTime
