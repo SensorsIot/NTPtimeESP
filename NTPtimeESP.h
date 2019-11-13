@@ -1,6 +1,6 @@
 /*
 
-   NTPtime for ESP8266
+   NTPtime for ESP8266/ESP32
    This routine gets the unixtime from a NTP server and adjusts it to the time zone and the
    Middle European summer time if requested
 
