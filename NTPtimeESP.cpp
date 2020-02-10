@@ -15,7 +15,7 @@ Based on work from John Lassen: http://www.john-lassen.de/index.php/projects/esp
 #define LEAP_YEAR(Y) ( ((1970+Y)>0) && !((1970+Y)%4) && ( ((1970+Y)%100) || !((1970+Y)%400) ) )
 
 #define SEC_TO_MS             1000
-#define RECV_TIMEOUT_DEFATUL  1       // 1 second
+#define RECV_TIMEOUT_DEFAULT  1       // 1 second
 #define SEND_INTRVL_DEFAULT   1       // 1 second
 #define MAX_SEND_INTERVAL     60      // 60 seconds
 #define MAC_RECV_TIMEOUT      60      // 60 seconds
@@ -54,7 +54,7 @@ NTPtime::NTPtime(String NTPserver) {
 	_sendPhase = true;
 	_sentTime  = 0;
 	_sendInterval = SEND_INTRVL_DEFAULT * SEC_TO_MS;
-	_recvTimeout = RECV_TIMEOUT_DEFATUL * SEC_TO_MS;
+	_recvTimeout = RECV_TIMEOUT_DEFAULT * SEC_TO_MS;
 }
 
 void NTPtime::printDateTime(strDateTime _dateTime) {
