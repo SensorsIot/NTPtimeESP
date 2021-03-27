@@ -275,7 +275,7 @@ strDateTime NTPtime::getNTPtime(float _timeZone, int _DayLightSaving) {
 			unsigned long secsSince1900 = highWord << 16 | lowWord;
 			const unsigned long seventyYears = 2208988800UL;
 			_unixTime = secsSince1900 - seventyYears;
-			if (_unixTime > 0) {
+			if (secsSince1900 > 0) {
 				_currentTimeStamp = adjustTimeZone(_unixTime, _timeZone, _DayLightSaving);
 				_dateTime = ConvertUnixTimestamp(_currentTimeStamp);
 				_dateTime.valid = true;
