@@ -2,7 +2,7 @@
 
    NTPtime for ESP8266/ESP32
    This routine gets the unixtime from a NTP server and adjusts it to the time zone and the
-   Middle European summer time if requested
+   Middle European summer time or US daylight saving time if requested
 
   Author: Andreas Spiess V1.0 2016-6-28
 
@@ -50,7 +50,7 @@ class NTPtime {
     strDateTime ConvertUnixTimestamp( unsigned long _tempTimeStamp);
     boolean summerTime(unsigned long _timeStamp );
     boolean daylightSavingTime(unsigned long _timeStamp);
-    unsigned long adjustTimeZone(unsigned long _timeStamp, float _timeZone, int _DayLightSavingSaving);
+    unsigned long adjustTimeZone(unsigned long _timeStamp, float _timeZone, int _DayLightSaving);
     WiFiUDP UDPNTPClient;
 };
 #endif
