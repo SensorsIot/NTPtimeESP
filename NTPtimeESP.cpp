@@ -21,7 +21,7 @@ Based on work from John Lassen: http://www.john-lassen.de/index.php/projects/esp
 #define MAX_RECV_TIMEOUT      60      // 60 seconds
 
 const int NTP_PACKET_SIZE = 48;
-byte _packetBuffer[ NTP_PACKET_SIZE];
+byte _packetBuffer[NTP_PACKET_SIZE];
 static const uint8_t _monthDays[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 float _timeZone=0.0;
@@ -151,9 +151,9 @@ boolean NTPtime::summerTime(unsigned long _timeStamp ) {
 	if (_tempDateTime.month < 3 || _tempDateTime.month > 10) return false; // keine Sommerzeit in Jan, Feb, Nov, Dez
 	if (_tempDateTime.month > 3 && _tempDateTime.month < 10) return true; // Sommerzeit in Apr, Mai, Jun, Jul, Aug, Sep
 	if (_tempDateTime.month == 3 && (_tempDateTime.hour + 24 * _tempDateTime.day) >= (1 +  24 * (31 - (5 * _tempDateTime.year / 4 + 4) % 7)) || _tempDateTime.month == 10 && (_tempDateTime.hour + 24 * _tempDateTime.day) < (1 +  24 * (31 - (5 * _tempDateTime.year / 4 + 1) % 7)))
-	return true;
+		return true;
 	else
-	return false;
+		return false;
 }
 
 boolean NTPtime::daylightSavingTime(unsigned long _timeStamp) {
@@ -202,23 +202,22 @@ boolean NTPtime::daylightSavingTime(unsigned long _timeStamp) {
 	else
 	{
 		// return false unless after first wk and dow = Sunday and hour < 2
-		return (_tempDateTime.day <8 && _tempDateTime.dayofWeek == 1 && _tempDateTime.hour < 1);
+		return (_tempDateTime.day < 8 && _tempDateTime.dayofWeek == 1 && _tempDateTime.hour < 1);
 	}  // end else
 } // end boolean NTPtime::daylightSavingTime(unsigned long _timeStamp)
 
 
 unsigned long NTPtime::adjustTimeZone(unsigned long _timeStamp, float _timeZone, int _DayLightSaving) {
 	
-	if (_DayLightSaving ==1 && summerTime(_timeStamp)) _timeStamp += 3600; // European Summer time
+	if (_DayLightSaving == 1 && summerTime(_timeStamp)) _timeStamp += 3600; // European Summer time
 	_timeStamp += (unsigned long)(_timeZone *  3600.0); // adjust timezone
-	if (_DayLightSaving ==2 && daylightSavingTime(_timeStamp)) _timeStamp += 3600; // US daylight time
+	if (_DayLightSaving == 2 && daylightSavingTime(_timeStamp)) _timeStamp += 3600; // US daylight time
 	return _timeStamp;
 }
 
 // _timeZone is the difference from UTC in hours
 // _DayLightSaving: 0: no adjustment, 1: European summer time, 2: US daylight saving time
 // Use returned time only after checking "ret.valid" flag
-
 strDateTime NTPtime::getNTPtime(float _timeZone, int _DayLightSaving) {
 	int cb;
 	strDateTime _dateTime;
