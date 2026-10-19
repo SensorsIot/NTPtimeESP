@@ -50,7 +50,7 @@ class NTPtime {
     strDateTime ConvertUnixTimestamp( unsigned long _tempTimeStamp);
     boolean summerTime(unsigned long _timeStamp );
     boolean daylightSavingTime(unsigned long _timeStamp);
-    unsigned long adjustTimeZone(unsigned long _timeStamp, float _timeZone, int _DayLightSavingSaving);
+    unsigned long adjustTimeZone(unsigned long _timeStamp, float _timeZone, int _DayLightSaving);
     WiFiUDP UDPNTPClient;
 };
 #endif
