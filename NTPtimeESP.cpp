@@ -1,7 +1,7 @@
 /*
 NTP
 This routine gets the unixtime from a NTP server and adjusts it to the time zone and the
-Middle European summer time if requested
+Middle European summer time or US daylight saving time if requested
 
 Author: Andreas Spiess V1.0 2016-5-28
 
@@ -215,8 +215,8 @@ unsigned long NTPtime::adjustTimeZone(unsigned long _timeStamp, float _timeZone,
 	return _timeStamp;
 }
 
-// time zone is the difference to UTC in hours
-// if _isDayLightSaving is true, time will be adjusted accordingly
+// _timeZone is the difference from UTC in hours
+// _DayLightSaving: 0: no adjustment, 1: European summer time, 2: US daylight saving time
 // Use returned time only after checking "ret.valid" flag
 
 strDateTime NTPtime::getNTPtime(float _timeZone, int _DayLightSaving) {
